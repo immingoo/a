@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마법공학 화이트 데이 이벤트</title>
+    <style>
+        body {
+            background-color: black; /* 검정색 배경 설정 */
+            color: white; /* 텍스트 색상을 흰색으로 변경 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            cursor: url('G:/Black/hover_ally_precise.cur'), auto; /* 커스텀 커서 설정 */
+        }
+
+        #playButton {
+            width: 100px; /* 버튼의 너비 */
+            height: 49px; /* 버튼의 높이 */
+            background-image: url('G:/Black/열기_Button.png'); /* 기본 버튼 이미지 */
+            background-size: contain; /* 이미지를 버튼 크기에 맞추기 */
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            position: fixed;
+            top: 720px;
+            outline: none; /* 수정된 부분: 버튼 클릭 시 외곽선 제거 */
+            border-radius: 6px; /* 모서리 둥글게 */
+        }
+
+        #playButton:hover {
+            background-image: url('G:/Black/열기_Button_2.png'); /* 마우스를 올렸을 때의 버튼 이미지 */
+            cursor: pointer; /* 마우스를 올렸을 때 포인터 형태로 변경 */
+        }
+
+        #videoContainer {
+            width: 50%;
+        }
+
+        video {
+            width: 100%;
+        }
+
+        #textTitle {
+            font-family: "Noto Sans Mono CJK KR", sans-serif; /* 폰트변경 */
+            font-size: 24px;
+            color: white;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: block; /* 초기에는 표시 */
+        }
+
+        #giftImage1, #giftImage2 {
+            display: none; /* 초기에는 숨김 */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #giftButton {
+            display: none; /* 초기에는 숨김 */
+            width: 100px; /* 버튼의 너비 */
+            height: 43px; /* 버튼의 높이 */
+            background-image: url('G:/Black/선물_Button.png'); /* 선물 이미지 */
+            background-size: contain; /* 이미지를 버튼 크기에 맞추기 */
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%); /* 가운데 정렬 */
+            border-radius: 6px; /* 모서리 둥글게 */
+        }
+
+        #giftButton:hover {
+            background-image: url('G:/Black/선물_Button_2.png'); /* 마우스를 올렸을 때의 버튼 이미지 */
+            cursor: pointer; /* 마우스를 올렸을 때 포인터 형태로 변경 */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="videoContainer">
+        <video id="videoPlayer" autoplay muted>
+            <source src="G:/Black/명품상자_Intro.mp4" type="video/mp4">
+        </video>
+        <video id="secondVideo" style="display: none;">
+            <source src="G:/Black/명품상자_Open2.mp4" type="video/mp4">
+        </video>
+    </div>
+    <button id="playButton"></button>
+    <div id="textTitle">To.지윤</div>
+    <img id="giftImage1" src="G:/Black/Letter.png" alt="Gift Image 1">
+    <img id="giftImage2" src="G:/Black/Present.png" alt="Gift Image 2">
+    <button id="giftButton"></button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButton = document.getElementById('playButton');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const secondVideo = document.getElementById('secondVideo');
+            const textTitle = document.getElementById('textTitle');
+            const giftImage1 = document.getElementById('giftImage1');
+            const giftImage2 = document.getElementById('giftImage2');
+            const giftButton = document.getElementById('giftButton');
+            let buttonHidden = false;
+            let isFirstImageDisplayed = true;
+
+            playButton.addEventListener('click', function() {
+                if (!buttonHidden) {
+                    playButton.style.display = 'none';
+                    textTitle.style.display = 'none';
+                    videoPlayer.style.display = 'none';
+                    secondVideo.style.display = 'block';
+                    secondVideo.play();
+                    secondVideo.muted = false;
+                    buttonHidden = true;
+                }
+            });
+
+            secondVideo.addEventListener('ended', function() {
+                if (!buttonHidden) {
+                    playButton.style.display = 'block';
+                    textTitle.style.display = 'block';
+                    videoPlayer.style.display = 'block';
+                    secondVideo.style.display = 'none';
+                    videoPlayer.play();
+                    videoPlayer.muted = false;
+                } else {
+                    // Show the appropriate gift image based on the current state
+                    if (isFirstImageDisplayed) {
+                        giftImage1.style.display = 'block';
+                    } else {
+                        giftImage2.style.display = 'block';
+                    }
+
+                    // Show the gift button
+                    giftButton.style.display = 'block';
+                }
+            });
+
+            // Toggle between gift images when the button is clicked
+            giftButton.addEventListener('click', function() {
+                if (isFirstImageDisplayed) {
+                    giftImage1.style.display = 'none';
+                    giftImage2.style.display = 'block';
+                    isFirstImageDisplayed = false;
+                } else {
+                    giftImage2.style.display = 'none';
+                    giftImage1.style.display = 'block';
+                    isFirstImageDisplayed = true;
+                }
+            });
+
+            videoPlayer.removeAttribute('controls');
+            secondVideo.removeAttribute('controls');
+        });
+    </script>
+</body>
+</html>
